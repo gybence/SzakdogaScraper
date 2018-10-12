@@ -1,0 +1,16 @@
+*
+!.gitignore
+!webserver1.py
+!postpy.py
+!tutorial
+!tutorial/*
+!tutorial/__pycache__
+!tutorial/__pycache__/*
+!tutorial/tutorial
+!tutorial/tutorial/*
+!tutorial/tutorial/__pycache__
+!tutorial/tutorial/__pycache__/*
+!tutorial/tutorial/spiders
+!tutorial/tutorial/spiders/*
+!tutorial/tutorial/spiders/__pycache__
+!tutorial/tutorial/spiders/__pycache__/*
