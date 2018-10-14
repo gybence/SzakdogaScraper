@@ -9,5 +9,4 @@
 !tutorial/tutorial/spiders
 !tutorial/tutorial/spiders/*
 !quotes.html
-!quotes_files
-!quotes_files/*
+!index.html
