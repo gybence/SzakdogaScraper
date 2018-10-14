@@ -35,7 +35,7 @@ class QuotesSpiderSpider(scrapy.Spider):
 		for a in article_children:
 			type = a.xpath("name()").extract_first()
 			if type == "p":
-				print(type)
+				# print(type)
 				par = a.xpath(".//text()").extract_first().strip()
 				item = {'par': par}
 				article_children_list.append(item)
