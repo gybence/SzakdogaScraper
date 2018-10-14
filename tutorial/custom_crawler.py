@@ -8,7 +8,7 @@ from scrapy.utils.project import get_project_settings
 
 class CustomCrawler(object):
 
-	def crawl(self, spider):
+	def crawl(self, spider,arg):
 		crawled_items = []
 
 		def add_item(item):
@@ -18,7 +18,7 @@ class CustomCrawler(object):
 
 		crawler = Crawler(spider, get_project_settings())
 		crawler.signals.connect(add_item, signals.item_scraped)
-		process.crawl(crawler)
+		process.crawl(crawler, url = arg)
 
 		process.start()
 
@@ -27,8 +27,8 @@ class CustomCrawler(object):
 def _crawl(queue,arg):
 	crawler = CustomCrawler()
 	spiderObj=QuotesSpiderSpider()
-	spiderObj.init(arg)
-	res = crawler.crawl(spiderObj)
+	# spiderObj.init(arg)
+	res = crawler.crawl(spiderObj,arg)
 	queue.put(res)
 
 def crawl(arg):

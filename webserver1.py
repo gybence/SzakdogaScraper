@@ -44,6 +44,7 @@ class S(BaseHTTPRequestHandler):
 		self._set_json_headers()
 
 		self.wfile.write((json.dumps(vmi)).encode("utf-8"))
+		print("==============================================================================================================")
 		
 	def scrapyzz(self, arg):
 		vmi = crawl(arg)

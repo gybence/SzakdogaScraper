@@ -4,7 +4,9 @@ API_ENDPOINT = "http://localhost:8080"
 
 	# http://quotes.toscrape.com/
 	# file:///C:/Users/Bence/Desktop/quotes.html
-value = input("URL to scrape: ")
+# value = input("URL to scrape: ")
+# value="file:///C:/Users/Bence/Desktop/index.html"
+value="file:///C:/Users/Bence/Desktop/quotes.html"
 
 data = {"url":value}
 
