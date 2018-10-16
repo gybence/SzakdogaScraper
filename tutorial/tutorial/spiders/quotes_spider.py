@@ -4,8 +4,7 @@ from scrapy.http import HtmlResponse
 
 class QuotesSpiderSpider(scrapy.Spider):
 	name = 'quotes_spider'
-	# allowed_domains = ['quotes.toscrape.com']
-	# 'http://quotes.toscrape.com/'
+	# allowed_domains = []
 	
 	def __init__(self, url='', *args, **kwargs):
 		super(QuotesSpiderSpider, self).__init__(*args, **kwargs)
@@ -35,7 +34,6 @@ class QuotesSpiderSpider(scrapy.Spider):
 		for a in article_children:
 			type = a.xpath("name()").extract_first()
 			if type == "p":
-				# print(type)
 				par = a.xpath(".//text()").extract_first().strip()
 				item = {'par': par}
 				article_children_list.append(item)
@@ -47,11 +45,4 @@ class QuotesSpiderSpider(scrapy.Spider):
 		yield {'related_titles': related_titles_list}
 		yield {'lead': lead}
 		yield {'article_children': article_children_list}
-	
-		# quotes = response.xpath("//div[@class='quote']")
-		# for quote in quotes:
-			# text = quote.xpath(".//span[@class='text']/text()").extract_first()
-			# author = quote.xpath(".//small//text()").extract_first()
-			# yield {'quote': text, "author": author}
-		# quotes = response.xpath("//div[@class='quote']//span[@class='text']/text()").extract()
-		# yield {'quotes': quotes}
+		

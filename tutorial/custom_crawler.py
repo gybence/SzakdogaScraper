@@ -33,7 +33,6 @@ class CustomCrawler(object):
 def _crawl(queue,arg):
 	crawler = CustomCrawler()
 	spiderObj=QuotesSpiderSpider()
-	# spiderObj.init(arg)
 	res = crawler.crawl(spiderObj,arg)
 	queue.put(res)
 

@@ -1,27 +1,16 @@
-#!/usr/bin/env python
-"""
-Very simple HTTP server in python.
-Usage::
-    ./dummy-web-server.py [<port>]
-Send a GET request::
-    curl http://localhost
-Send a HEAD request::
-    curl -I http://localhost
-Send a POST request::
-    curl -d "foo=bar&bin=baz" http://localhost
-"""
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from tutorial.custom_crawler import crawl
 
 hostName = ""
 hostPort = 8080
-# scraper = Scraper()
+
 class S(BaseHTTPRequestHandler):
 	def _set_json_headers(self):
 		self.send_response(200)
 		self.send_header('Content-type', 'application/json')
 		self.end_headers()
+		
 	def _set_headers(self):
 		self.send_response(200)
 		self.send_header('Content-type', 'text/html')
@@ -36,8 +25,8 @@ class S(BaseHTTPRequestHandler):
 		
 	def do_POST(self):
 		print("==============================================================================================================")
-		content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
-		post_data = self.rfile.read(content_length) # <--- Gets the data itself
+		content_length = int(self.headers['Content-Length'])
+		post_data = self.rfile.read(content_length)
 		returned_data = self.csinald(post_data)
 		vmi = self.scrapyzz(returned_data["returl"])
 
