@@ -3,6 +3,7 @@ from scrapy.crawler import CrawlerProcess, Crawler
 from scrapy.settings import Settings
 from tutorial.tutorial.spiders.quotes_spider import QuotesSpiderSpider
 import time
+import os
 import multiprocessing as mp
 from scrapy.utils.project import get_project_settings
 
@@ -15,8 +16,13 @@ class CustomCrawler(object):
 			crawled_items.append(item)
 
 		process = CrawlerProcess()
+		
+		settings = Settings()
+		os.environ['SCRAPY_SETTINGS_MODULE'] = 'tutorial.tutorial.settings'
+		settings_module_path = os.environ['SCRAPY_SETTINGS_MODULE']
+		settings.setmodule(settings_module_path, priority='project')
 
-		crawler = Crawler(spider, get_project_settings())
+		crawler = Crawler(spider, settings)
 		crawler.signals.connect(add_item, signals.item_scraped)
 		process.crawl(crawler, url = arg)
 

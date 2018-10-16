@@ -2,11 +2,10 @@
 !.gitignore
 !webserver1.py
 !postpy.py
+!scrapy.cfg
 !tutorial
 !tutorial/*
 !tutorial/tutorial
 !tutorial/tutorial/*
 !tutorial/tutorial/spiders
 !tutorial/tutorial/spiders/*
-!quotes.html
-!index.html

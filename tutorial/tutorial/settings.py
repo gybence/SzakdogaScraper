@@ -19,7 +19,7 @@ NEWSPIDER_MODULE = 'tutorial.tutorial.spiders'
 #USER_AGENT = 'tutorial (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+# ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -53,7 +53,7 @@ ROBOTSTXT_OBEY = True
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-	'scrapy.contrib.downloadermiddleware.httpcache.HttpCacheMiddleware': 300,
+	'scrapy.downloadermiddlewares.httpcache.HttpCacheMiddleware': 300,
    # 'tutorial.middlewares.TutorialDownloaderMiddleware': 543,
 }
 
@@ -84,11 +84,8 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-HTTPCACHE_POLICY = 'scrapy.extensions.httpcache.DummyPolicy'
-HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-HTTPCACHE_ENABLED = True
-HTTPCACHE_EXPIRATION_SECS = 0  # Never Expire
-HTTPCACHE_DIR = 'tutorial.httpcache'
-HTTPCACHE_IGNORE_HTTP_CODES = [301, 302, 404]
-HTTPCACHE_IGNORE_MISSING = False
-HTTPCACHE_IGNORE_RESPONSE_CACHE_CONTROLS = ["no-cache", "no-store"]
+HTTPCACHE_ENABLED=True
+HTTPCACHE_EXPIRATION_SECS=0
+HTTPCACHE_DIR='httpcache'
+HTTPCACHE_IGNORE_HTTP_CODES=[]
+HTTPCACHE_STORAGE='scrapy.extensions.httpcache.FilesystemCacheStorage'

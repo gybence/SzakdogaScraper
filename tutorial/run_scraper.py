@@ -20,16 +20,21 @@
 		# os.execl(sys.executable, sys.executable, *sys.argv)
 
 from scrapy.crawler import CrawlerRunner
-from scrapy.utils.project import get_project_settings
 import scrapy
 from crochet import setup
 from importlib import import_module
 setup()
 
 def run_spider(arg, arg2):
+	settings = Settings()
+	os.environ['SCRAPY_SETTINGS_MODULE'] = 'scrapy.tutorial.settings'
+	settings_module_path = os.environ['SCRAPY_SETTINGS_MODULE']
+	settings.setmodule(settings_module_path, priority='project')
+	
 	module_name="tutorial.tutorial.spiders.{}".format(arg)
 	scrapy_var = import_module(module_name)   #do some dynamic import of selected spider   
 	spiderObj=scrapy_var.QuotesSpiderSpider()		   #get mySpider-object from spider module
-	crawler = CrawlerRunner(get_project_settings())   #from Scrapy docs
+	
+	crawler = CrawlerRunner(settings)   #from Scrapy docs
 	spiderObj.setthings(arg2)
 	d = crawler.crawl(spiderObj)
