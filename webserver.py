@@ -1,11 +1,10 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
-from tutorial.custom_crawler import crawl
+from szakdolgozat_project.szakdolgozat_crawler import crawl
 
 hostName = ""
-hostPort = 8080
 
-class S(BaseHTTPRequestHandler):
+class WebServer(BaseHTTPRequestHandler):
 	def _set_json_headers(self):
 		self.send_response(200)
 		self.send_header('Content-type', 'application/json')
@@ -21,39 +20,31 @@ class S(BaseHTTPRequestHandler):
 
 	def do_GET(self):
 		self._set_headers()
-		self.wfile.write("got".encode("utf-8"))
+		self.wfile.write(b"<html><body><h1>Szakdolgozat Scraper Webserver!</h1></body></html>")
 		
 	def do_POST(self):
 		print("==============================================================================================================")
 		content_length = int(self.headers['Content-Length'])
 		post_data = self.rfile.read(content_length)
-		returned_data = self.csinald(post_data)
-		vmi = self.scrapyzz(returned_data["returl"])
 
+		url_obj = json.loads(post_data) 
+		print('Received URL for scraping: %s' %url_obj["url"])
+		
+		scraped_json = crawl(url_obj["url"])
 		self._set_json_headers()
-
-		self.wfile.write((json.dumps(vmi)).encode("utf-8"))
+		self.wfile.write((json.dumps(scraped_json)).encode("utf-8"))
 		print("==============================================================================================================")
-		
-	def scrapyzz(self, arg):
-		vmi = crawl(arg)
-		return vmi
-		
-	def csinald(self, post_data):
-		obj = json.loads(post_data)
-		asd = obj["url"]
-		data = {"returl":asd}
-		return data
-		
-def run(server_class=HTTPServer, handler_class=S):
-	server_address = (hostName, hostPort)
+						
+def run(server_class=HTTPServer, handler_class=WebServer, port=8080):
+	server_address = (hostName, port)
 	httpd = server_class(server_address, handler_class)
-	print ('Starting httpd... %s' % hostPort)
+	print ('Serving on port: %s' %port)
 	httpd.serve_forever()
 
 if __name__ == "__main__":
 	from sys import argv
 
+	print ('Starting httpd...')
 	if len(argv) == 2:
 		run(port=int(argv[1]))
 	else:

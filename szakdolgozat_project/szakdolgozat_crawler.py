@@ -1,13 +1,12 @@
 from scrapy import signals
 from scrapy.crawler import CrawlerProcess, Crawler
 from scrapy.settings import Settings
-from tutorial.tutorial.spiders.quotes_spider import QuotesSpiderSpider
+from szakdolgozat_project.szakdolgozat.spiders.szakdolgozat_spider import SzakdolgozatSpider
 import time
 import os
 import multiprocessing as mp
-from scrapy.utils.project import get_project_settings
 
-class CustomCrawler(object):
+class SzakdolgozatCrawler(object):
 
 	def crawl(self, spider,arg):
 		crawled_items = []
@@ -18,9 +17,9 @@ class CustomCrawler(object):
 		process = CrawlerProcess()
 		
 		settings = Settings()
-		os.environ['SCRAPY_SETTINGS_MODULE'] = 'tutorial.tutorial.settings'
+		os.environ['SCRAPY_SETTINGS_MODULE'] = 'szakdolgozat_project.szakdolgozat.settings'
 		settings_module_path = os.environ['SCRAPY_SETTINGS_MODULE']
-		settings.setmodule(settings_module_path, priority='project')
+		settings.setmodule(settings_module_path, priority = 'project')
 
 		crawler = Crawler(spider, settings)
 		crawler.signals.connect(add_item, signals.item_scraped)
@@ -31,14 +30,14 @@ class CustomCrawler(object):
 		return crawled_items
 		
 def _crawl(queue,arg):
-	crawler = CustomCrawler()
-	spiderObj=QuotesSpiderSpider()
+	crawler = SzakdolgozatCrawler()
+	spiderObj = SzakdolgozatSpider()
 	res = crawler.crawl(spiderObj,arg)
 	queue.put(res)
 
 def crawl(arg):
 	q = mp.Queue()
-	p = mp.Process(target=_crawl, args=(q,arg,))
+	p = mp.Process(target = _crawl, args = (q,arg,))
 	p.start()
 	res = q.get()
 	p.join()

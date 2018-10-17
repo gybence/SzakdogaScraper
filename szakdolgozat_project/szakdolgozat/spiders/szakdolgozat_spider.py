@@ -2,12 +2,12 @@ import scrapy
 from scrapy.selector import Selector
 from scrapy.http import HtmlResponse
 
-class QuotesSpiderSpider(scrapy.Spider):
-	name = 'quotes_spider'
+class SzakdolgozatSpider(scrapy.Spider):
+	name = 'szakdolgozat_spider'
 	# allowed_domains = []
 	
 	def __init__(self, url='', *args, **kwargs):
-		super(QuotesSpiderSpider, self).__init__(*args, **kwargs)
+		super(SzakdolgozatSpider, self).__init__(*args, **kwargs)
 		self.start_urls.append(url)
 		
 	
