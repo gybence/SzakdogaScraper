@@ -1,6 +1,7 @@
 *
 !.gitignore
 !webserver.py
+!flask_server_szakdolgozat.py
 !postpy.py
 !scrapy.cfg
 !szakdolgozat_project
