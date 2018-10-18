@@ -10,7 +10,7 @@ def scrape_POST():
 	
 	print('Received URL for scraping: %s' %content['url'])
 	scraped_json = crawl(content["url"])
-	print(type(scraped_json[0]))
+
 	print("==============================================================================================================")	
 	return (json.dumps(scraped_json)).encode("utf-8")
 
