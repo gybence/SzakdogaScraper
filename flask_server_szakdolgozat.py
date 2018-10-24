@@ -7,12 +7,11 @@ app = Flask(__name__)
 def scrape_POST():
 	print("==============================================================================================================")
 	content = request.json
-	
-	print('Received URL for scraping: %s' %content['url'])
+	print('URL: %s' %content['url'])
 	scraped_json = crawl(content["url"])
 
 	print("==============================================================================================================")	
-	return (json.dumps(scraped_json)).encode("utf-8")
+	return (json.dumps(scraped_json[0])).encode("utf-8")
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=5000)
