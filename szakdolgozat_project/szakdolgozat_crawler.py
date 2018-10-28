@@ -1,7 +1,7 @@
 from scrapy import signals
 from scrapy.crawler import CrawlerProcess, Crawler
 from scrapy.settings import Settings
-from szakdolgozat_project.szakdolgozat.spiders.szakdolgozat_spider import SzakdolgozatSpider
+from szakdolgozat_project.szakdolgozat.spiders.index_spider import IndexSpider
 import time
 import os
 import multiprocessing as mp
@@ -31,7 +31,7 @@ class SzakdolgozatCrawler(object):
 		
 def _crawl(queue,arg):
 	crawler = SzakdolgozatCrawler()
-	spiderObj = SzakdolgozatSpider()
+	spiderObj = IndexSpider()
 	res = crawler.crawl(spiderObj,arg)
 	queue.put(res)
 

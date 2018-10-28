@@ -1,20 +1,20 @@
 import scrapy
 from scrapy.selector import Selector
 from scrapy.http import HtmlResponse
+from . import normalize
 
-class SzakdolgozatSpider(scrapy.Spider):
-	name = 'szakdolgozat_spider'
+class IndexSpider(scrapy.Spider):
+	name = 'index_spider'
 	# allowed_domains = []
 	
 	def __init__(self, url='', *args, **kwargs):
-		super(SzakdolgozatSpider, self).__init__(*args, **kwargs)
+		super(IndexSpider, self).__init__(*args, **kwargs)
 		self.start_urls.append(url)
 		
 	
 	def parse(self, response):
-	
-		title = response.xpath('//title/text()').extract_first()
-		content_title = response.xpath('//div/h1/span/text()').extract_first()
+		content_title = response.xpath('//title/text()').extract_first()
+		title = response.xpath('//div/h1/span/text()').extract_first()
 		date = response.xpath('//div[@class="datum"]/text()').extract_first().strip()
 		author = response.xpath('//div[contains(@class,"szerzo")]/div[contains(@class,"kovetes")]/a/text()').extract_first()
 		
@@ -24,33 +24,35 @@ class SzakdolgozatSpider(scrapy.Spider):
 			rel_title = t.xpath('.//a/text()').extract_first()
 			rel_desc = t.xpath('.//div/text()').extract_first()
 			rel_href = t.xpath('.//a').xpath('@href').extract_first()
-			item = {'rel_title': rel_title, 'rel_desc': rel_desc, 'rel_href': rel_href}
+			item = {'RelTitle': rel_title, 'RelDesc': rel_desc, 'RelHref': rel_href}
 			related_titles_list.append(item)
 		
 		lead = response.xpath('//div[@class="lead_container"]/div[@class="lead"]/text()').extract_first()
 		lead_text = None
 		if lead is not None:
-			lead_text = lead.strip()
+			lead_text = normalize(lead)
 		else:
-			lead_text = ""
+			lead_text = ''
 		
 		article_children = response.xpath('//div[@class="cikk-torzs"]/*[not((name()="div" or name()="aside") and not(contains(@class,"eyecatcher")))]')
 		article_children_list = []
 		for a in article_children:
-			tipus = a.xpath("name()").extract_first()
+			tipus = a.xpath('name()').extract_first()
 			parts = None
 			parts_concat = None
-			if tipus == "p":
-				parts = a.xpath(".//text()").extract()	
-				parts_concat = ''.join(parts).strip()
-			elif tipus == "blockquote":
+			if tipus == 'p':
+				parts = a.xpath('.//text()').extract()
+				parts_concat = normalize(''.join(parts))
+			elif tipus == 'blockquote':
 				parts = a.xpath('.//p/text()').extract()
-				parts_concat = ''.join(parts).strip()
-			elif tipus == "div":
-				parts_concat = a.xpath('.//div/p/text()').extract_first().strip()
-			elif tipus == "ul":
+				parts_concat = ''.join(['\"', normalize(''.join(parts)), '\"'])
+			elif tipus == 'div':
+				parts_concat = normalize(a.xpath('.//div/p/text()').extract_first())
+			elif tipus == 'ul':
 				parts = a.xpath('./li/text()').extract()
-				parts_concat = ''.join(parts).strip()
+				parts_concat = normalize(''.join(parts))
 			article_children_list.append(parts_concat)			
 		
-		yield {'content_title': content_title, 'title': title, 'author': author, 'date': date, 'related_titles': related_titles_list, 'lead': lead_text, 'article_children': article_children_list}	
+		yield {'Url': self.start_urls[0], 'ContentTitle': content_title, 'Title': title, 'Author': author, 
+		'Date': date, 'RelatedTitles': related_titles_list, 'Lead': lead_text, 
+		'ArticleChildren': article_children_list}
