@@ -6,6 +6,8 @@ import time
 import os
 import multiprocessing as mp
 
+allowed_urls = ['https://index.hu/']
+
 class SzakdolgozatCrawler(object):
 
 	def crawl(self, spider,arg):
@@ -36,9 +38,17 @@ def _crawl(queue,arg):
 	queue.put(res)
 
 def crawl(arg):
+	if validate_url(arg) is False:
+		return None
 	q = mp.Queue()
 	p = mp.Process(target = _crawl, args = (q,arg,))
 	p.start()
 	res = q.get()
 	p.join()
 	return res
+	
+def validate_url(arg):
+	for url in allowed_urls:
+		if url in arg:
+			return True
+	return False

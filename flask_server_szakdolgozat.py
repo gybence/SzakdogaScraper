@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 import json
 from szakdolgozat_project.szakdolgozat_crawler import crawl
 app = Flask(__name__)
@@ -9,7 +9,10 @@ def scrape_POST():
 	content = request.json
 	print('URL: %s' %content['url'])
 	scraped_json = crawl(content["url"])
-
+	
+	if scraped_json is None:
+		abort(404)
+	
 	print("==============================================================================================================")	
 	return (json.dumps(scraped_json[0])).encode("utf-8")
 

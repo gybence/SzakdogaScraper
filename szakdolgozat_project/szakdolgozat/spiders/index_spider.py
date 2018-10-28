@@ -15,7 +15,10 @@ class IndexSpider(scrapy.Spider):
 	def parse(self, response):
 		content_title = response.xpath('//title/text()').extract_first()
 		title = response.xpath('//div/h1/span/text()').extract_first()
-		date = response.xpath('//div[@class="datum"]/text()').extract_first().strip()
+		date = response.xpath('//div[@class="datum"]/text()').extract_first()
+		date_text = None
+		if date is not None:
+			date_text = date.strip()
 		author = response.xpath('//div[contains(@class,"szerzo")]/div[contains(@class,"kovetes")]/a/text()').extract_first()
 		
 		related_titles = response.xpath('//div[@class="related_box__item"]')
@@ -31,8 +34,6 @@ class IndexSpider(scrapy.Spider):
 		lead_text = None
 		if lead is not None:
 			lead_text = normalize(lead)
-		else:
-			lead_text = ''
 		
 		article_children = response.xpath('//div[@class="cikk-torzs"]/*[not((name()="div" or name()="aside") and not(contains(@class,"eyecatcher")))]')
 		article_children_list = []
@@ -50,9 +51,11 @@ class IndexSpider(scrapy.Spider):
 				parts_concat = normalize(a.xpath('.//div/p/text()').extract_first())
 			elif tipus == 'ul':
 				parts = a.xpath('./li/text()').extract()
-				parts_concat = normalize(''.join(parts))
+				for i, p in enumerate(parts): 
+					parts[i] = '\u25cf ' + normalize(p)
+				parts_concat = '\n\n'.join(parts)
 			article_children_list.append(parts_concat)			
 		
 		yield {'Url': self.start_urls[0], 'ContentTitle': content_title, 'Title': title, 'Author': author, 
-		'Date': date, 'RelatedTitles': related_titles_list, 'Lead': lead_text, 
+		'Date': date_text, 'RelatedTitles': related_titles_list, 'Lead': lead_text, 
 		'ArticleChildren': article_children_list}
