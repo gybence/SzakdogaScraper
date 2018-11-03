@@ -3,12 +3,11 @@ from scrapy.selector import Selector
 from scrapy.http import HtmlResponse
 from . import normalize
 
-class IndexSpider(scrapy.Spider):
+class ASpider(scrapy.Spider):
 	name = 'index_spider'
-	# allowed_domains = []
 	
 	def __init__(self, url='', *args, **kwargs):
-		super(IndexSpider, self).__init__(*args, **kwargs)
+		super(ASpider, self).__init__(*args, **kwargs)
 		self.start_urls.append(url)
 		
 	

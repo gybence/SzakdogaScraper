@@ -1,16 +1,15 @@
 from scrapy import signals
 from scrapy.crawler import CrawlerProcess, Crawler
 from scrapy.settings import Settings
-from szakdolgozat_project.szakdolgozat.spiders.index_spider import IndexSpider
 import time
+from importlib import import_module
 import os
 import multiprocessing as mp
-
-allowed_urls = ['https://index.hu/']
+from szakdolgozat_project.postgre_szakdolgozat import get_for_validation
 
 class SzakdolgozatCrawler(object):
 
-	def crawl(self, spider,arg):
+	def crawl(self, spider, arg):
 		crawled_items = []
 
 		def add_item(item):
@@ -31,24 +30,24 @@ class SzakdolgozatCrawler(object):
 
 		return crawled_items
 		
-def _crawl(queue,arg):
+def _crawl(queue, name, arg):
+	module_name= 'szakdolgozat_project.szakdolgozat.spiders.{}'.format(name)
+	scrapy_var = import_module(module_name)
+	spiderObj = scrapy_var.ASpider()	
+	
 	crawler = SzakdolgozatCrawler()
-	spiderObj = IndexSpider()
 	res = crawler.crawl(spiderObj,arg)
 	queue.put(res)
 
-def crawl(arg):
-	if validate_url(arg) is False:
+def crawl(pgpw, arg):
+	name = get_for_validation(pgpw, arg)
+	if name is None:
 		return None
+		
 	q = mp.Queue()
-	p = mp.Process(target = _crawl, args = (q,arg,))
+	p = mp.Process(target = _crawl, args = (q, name[0], arg, ))
 	p.start()
 	res = q.get()
 	p.join()
 	return res
 	
-def validate_url(arg):
-	for url in allowed_urls:
-		if url in arg:
-			return True
-	return False
