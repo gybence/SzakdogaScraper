@@ -1,7 +1,7 @@
+from . import normalize
 import scrapy
 from scrapy.selector import Selector
 from scrapy.http import HtmlResponse
-from . import normalize
 
 class ASpider(scrapy.Spider):
 	name = 'index_spider'

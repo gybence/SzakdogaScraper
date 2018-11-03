@@ -1,11 +1,11 @@
-from scrapy import signals
+from szakdolgozat_project.postgre_szakdolgozat import get_for_validation
 from scrapy.crawler import CrawlerProcess, Crawler
 from scrapy.settings import Settings
-import time
+from scrapy import signals
 from importlib import import_module
-import os
 import multiprocessing as mp
-from szakdolgozat_project.postgre_szakdolgozat import get_for_validation
+import time
+import os
 
 class SzakdolgozatCrawler(object):
 
@@ -31,21 +31,20 @@ class SzakdolgozatCrawler(object):
 		return crawled_items
 		
 def _crawl(queue, name, arg):
-	module_name= 'szakdolgozat_project.szakdolgozat.spiders.{}'.format(name)
-	scrapy_var = import_module(module_name)
-	spiderObj = scrapy_var.ASpider()	
-	
-	crawler = SzakdolgozatCrawler()
-	res = crawler.crawl(spiderObj,arg)
-	queue.put(res)
-
-def crawl(pgpw, arg):
-	name = get_for_validation(pgpw, arg)
-	if name is None:
-		return None
+	try:
+		module_name= 'szakdolgozat_project.szakdolgozat.spiders.{}'.format(name)
+		scrapy_var = import_module(module_name)
+		spiderObj = scrapy_var.ASpider()	
 		
+		crawler = SzakdolgozatCrawler()
+		res = crawler.crawl(spiderObj,arg)
+		queue.put(res)
+	except (ModuleNotFoundError):
+		queue.put(None)
+
+def crawl(pgpw, name, arg):	
 	q = mp.Queue()
-	p = mp.Process(target = _crawl, args = (q, name[0], arg, ))
+	p = mp.Process(target = _crawl, args = (q, name, arg, ))
 	p.start()
 	res = q.get()
 	p.join()
