@@ -1,4 +1,4 @@
-from szakdolgozat_project.postgre_szakdolgozat import get_for_validation
+from szakdolgozat_project.postgres_szakdolgozat import get_for_validation
 from scrapy.crawler import CrawlerProcess, Crawler
 from scrapy.settings import Settings
 from scrapy import signals

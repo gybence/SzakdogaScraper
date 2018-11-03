@@ -1,4 +1,4 @@
-from szakdolgozat_project.postgre_szakdolgozat import get_from_db, insert_to_db, print_delimiter, postgres_test, get_for_validation
+from szakdolgozat_project.postgres_szakdolgozat import get_from_db, insert_to_db, print_delimiter, postgres_authorize, get_for_validation
 from szakdolgozat_project.szakdolgozat_crawler import crawl
 from flask import Flask, request, jsonify, abort
 import datetime
