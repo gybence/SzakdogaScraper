@@ -4,6 +4,7 @@
 !flask_server_szakdolgozat.py
 !postpy.py
 !scrapy.cfg
+!create_szakdolgozat.sql
 !szakdolgozat_project
 !szakdolgozat_project/*
 !szakdolgozat_project/szakdolgozat
