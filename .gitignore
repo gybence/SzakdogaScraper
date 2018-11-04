@@ -10,3 +10,4 @@
 !szakdolgozat_project/szakdolgozat/*
 !szakdolgozat_project/szakdolgozat/spiders
 !szakdolgozat_project/szakdolgozat/spiders/*
+*.pyc
