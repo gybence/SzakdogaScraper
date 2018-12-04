@@ -22,7 +22,7 @@ def scrape_POST():
 		print_delimiter()
 		return from_db
 	else: 
-		scraped_json = crawl(pgpw, record[2], content['url'])
+		scraped_json = crawl(record[2], content['url'])
 		if scraped_json is None or len(scraped_json) == 0:
 			print_delimiter()
 			abort(404)

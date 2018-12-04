@@ -1,4 +1,3 @@
-from szakdolgozat_project.postgres_module import get_for_validation
 from scrapy.crawler import CrawlerProcess, Crawler
 from scrapy.settings import Settings
 from scrapy import signals
@@ -42,7 +41,7 @@ def _crawl(queue, name, arg):
 	except (ModuleNotFoundError):
 		queue.put(None)
 
-def crawl(pgpw, name, arg):	
+def crawl(name, arg):	
 	q = mp.Queue()
 	p = mp.Process(target = _crawl, args = (q, name, arg, ))
 	p.start()
